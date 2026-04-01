@@ -6,7 +6,7 @@
 
 ## Abstract
 
-CAYPO brings the Machine Payments Protocol (MPP) to Canton Network, enabling AI agents to hold USDCx, make instant payments, and access 17+ API services through a single SDK. MPP is the open payment standard by Stripe and Tempo, already integrated with Visa, Lightning, Solana, and Sui. Canton is among the leading institutional blockchains yet to integrate with MPP — CAYPO aims to address this gap.
+CAYPO brings the Machine Payments Protocol (MPP) to Canton Network as open-source infrastructure — a complete set of TypeScript packages that enable any Canton developer to build agent payment applications with USDCx. MPP is the open payment standard by Stripe and Tempo, already integrated with Visa, Lightning, Solana, and Sui. Canton is among the leading institutional blockchains yet to integrate with MPP — CAYPO aims to address this gap.
 
 Milestones 1–2 are already completed and live. We are requesting **2,000,000 CC** across 4 milestones (M1–M2 retroactive, M3–M4 forward-looking).
 
@@ -40,17 +40,17 @@ A growing number of major ecosystems are already exploring or adopting MPP:
 
 Canton is currently among the few institutional-focused blockchains exploring MPP integration, with Caypo leading this effort. Expanding Canton’s MPP support would help capture a share of emerging agent payment flows that are currently developing across multiple ecosystems
 
-**Intended outcome:** Canton becomes a first-class MPP payment method — recognized alongside Tempo, Stripe, Visa, and Lightning — with a live gateway, comprehensive SDK, and production mainnet deployment. The entire stack ships as open-source building blocks: any Canton developer can compose these packages into their own agent payment products without depending on us.
+**Intended outcome:** Canton becomes a first-class MPP payment method — recognized alongside Tempo, Stripe, Visa, and Lightning — with an open-source gateway framework, comprehensive SDK, and production mainnet deployment The entire stack ships as open-source building blocks: any Canton developer can compose these packages into their own agent payment products without depending on us.
 
 ### 2. Implementation Mechanics
 
-CAYPO is a complete agent finance platform consisting of 5 npm packages:
+CAYPO is an open-source agent finance toolkit consisting of 5 npm packages:
 
 - **@caypo/mpp-canton** — Canton payment method for MPP. Implements charge intent using CIP-56 TransferFactory.Transfer with USDCx. Zod schema validation, full error handling.
 - **@caypo/canton-sdk** — Core SDK. Canton JSON Ledger API v2 client, USDCx operations (Holding queries, transfer, merge), encrypted wallet (AES-256-GCM, PBKDF2), safeguards (per-tx and daily limits), traffic management, MPP auto-pay client. String-based decimal arithmetic — no floating point.
 - **@caypo/canton-cli** — 36 commands. Agent wallet management, USDCx transfers, MPP auto-pay, MCP server installation, savings, credit, exchange, investment operations.
 - **@caypo/canton-mcp** — MCP server. 35 tools + 20 prompts. Compatible with Claude Desktop, Cursor, Windsurf, and any MCP-compatible AI assistant.
-- **@caypo/canton-gateway** — MPP API proxy (Hono framework). 17 services (OpenAI, Anthropic, Google Gemini, Groq, fal.ai, Firecrawl, Brave Search, and 10 others), 46 endpoints. Agents pay in USDCx via HTTP 402, gateway verifies payment on Canton, forwards to upstream API.
+- **@caypo/canton-gateway** — Open-source MPP gateway framework (Hono). Handles HTTP 402 payment verification against Canton ledger, service catalog management, and upstream API proxying. Ships with example service configurations. Any developer can fork and deploy their own gateway with their own service endpoints and API keys.
 
 **Technology stack:** TypeScript, pnpm monorepo, Turborepo, Vitest, Zod, Hono, Node.js. Canton JSON Ledger API v2 (gRPC/HTTP). CIP-56 Token Standard (TransferFactory, TransferPreapproval).
 
@@ -61,9 +61,7 @@ CAYPO is a complete agent finance platform consisting of 5 npm packages:
 
 **CIP-0082 — "reference implementations":** CAYPO is the reference implementation for MPP on Canton. The Canton method spec ([mpp-specs PR #198](https://github.com/tempoxyz/mpp-specs/pull/198)) establishes Canton as an officially recognized payment method.
 
-**CIP-0082 — "critical infra":** The MPP gateway at [mpp.caypo.xyz](https://mpp.caypo.xyz) is live infrastructure that any Canton application can use to accept agent payments. The `/llms.txt` and `/api/services` endpoints enable automated agent discovery.
-
-**CIP-0047 — Featured Apps:** CAYPO gateway generates on-chain activity markers (USDCx transfers, CC traffic burn) that contribute to Canton's reward distribution. Featured App application planned for Milestone 3.
+**CIP-0082 — "critical infra":** The open-source gateway framework enables any Canton developer to deploy their own MPP-compatible gateway. Built-in /llms.txt and /api/services endpoints provide standardized agent discovery.
 
 **CIP-56 — Token Standard:** All USDCx operations use CIP-56 TransferFactory.Transfer with TransferPreapproval for 1-step automated payments.
 
@@ -88,13 +86,13 @@ No backward compatibility impact. CAYPO is a new application-layer product built
   - 312 unit tests, 100% pass rate
   - Open-source repo (Apache 2.0 / MIT) on GitHub
 
-### Milestone 2: Agent Platform + Live Gateway (COMPLETED)
+### Milestone 2: Agent Platform + Gateway Framework (COMPLETED)
 
 * **Estimated Delivery:** Completed (March 2026)
 * **Focus:** MCP server, gateway deployment, 5 account types, landing page, documentation
 * **Deliverables / Value Metrics:**
   - @caypo/canton-mcp — 35 tools + 20 prompts, works with Claude Desktop
-  - @caypo/canton-gateway deployed at mpp.caypo.xyz — 17 services, 46 endpoints, MPP 402 gate active
+  - @caypo/canton-gateway framework — HTTP 402 payment gate, service catalog system, upstream proxy logic. Published on npm with example configurations.
   - 5 account types: Checking, Savings, Credit, Exchange, Investment — full SDK implementation
   - CLI expanded to 36 commands
   - 10 agent skills for Claude Code, Codex, Copilot
@@ -111,10 +109,15 @@ No backward compatibility impact. CAYPO is a new application-layer product built
   - Session intent — streaming payments (pay-per-token) for LLM inference, new MPP intent spec submitted upstream
   - Payment analytics dashboard — caypo.xyz/analytics with real-time transaction volume and service breakdown
   - Python SDK — @caypo/canton-sdk-python for LangChain, CrewAI, AutoGen agent frameworks
-  - Featured App application — submit CAYPO for Canton Featured App status (CIP-0047)
   - Mainnet E2E test suite with CI/CD pipeline
+  - Developer migration guide (DevNet → Mainnet) published in docs
 
-### Milestone 4: Platform Expansion + Ecosystem Tooling
+* **Adoption Criteria:**
+  - npm downloads: 250+ cumulative across all 5 packages
+  - At least 1 external developer or teams using @caypo/mpp-canton or @caypo/canton-sdk in their own projects
+  - Python SDK published with at least 1 example integration
+
+### Milestone 4: Ecosystem Tooling + Developer Adoption
 
 * **Estimated Delivery:** 8 weeks after M3 acceptance
 * **Focus:** Gateway expansion, agent-to-agent protocol, SDK v1.0, developer onboarding
@@ -125,7 +128,13 @@ No backward compatibility impact. CAYPO is a new application-layer product built
   - SDK v1.0 stable release — semver 1.0 with backward compatibility guarantees
   - Developer onboarding program — tutorials, video walkthroughs, 5+ example applications
   - Multi-language MCP support — Python MCP server alongside TypeScript
+  - Rust SDK — @caypo/canton-sdk-rust for LangChain, CrewAI, AutoGen agent frameworks
   - Canton agent template — open-source "Start accepting USDCx payments in 5 minutes" repo
+
+  * **Adoption Criteria:**
+  - npm downloads: 500+ cumulative
+  - At least 2 external developers or teams using CAYPO packages (documented via GitHub issues, forks, or integrations)
+  - Rust SDK published with at least 1 example integration
 
 ## Acceptance Criteria
 
@@ -140,8 +149,8 @@ The Tech & Ops Committee will evaluate completion based on:
 
 * **M1:** npm packages published and installable. 312+ tests passing. Canton method spec PR submitted to tempoxyz/mpp-specs. ✅ Already met.
 * **M2:** Gateway live at mpp.caypo.xyz returning 200 on /health. 35 MCP tools registered. Landing page and docs deployed. ✅ Already met.
-* **M3:** Successful mainnet USDCx transfer via CAYPO SDK. Python SDK published on PyPI. Analytics dashboard live with real data.
-* **M4:** Gateway serving 30+ services. Agent-to-agent escrow contract deployed on Canton. SDK v1.0.0 published with semver guarantees.
+* **M3:** Successful mainnet USDCx transfer via CAYPO SDK. Python SDK published on PyPI with example integration. 250+ npm downloads cumulative. At least 1 external developer using CAYPO packages.
+* **M4:** Agent-to-agent escrow contract deployed on Canton. SDK v1.0.0 published with semver guarantees. 500+ npm downloads cumulative.
 
 ## Funding
 
@@ -174,7 +183,8 @@ Canton Network is backed by the world's largest financial institutions — DTCC,
 
 McKinsey projects **$3–5 trillion** in global agentic commerce by 2030. The agentic payment infrastructure market alone is projected to reach **$93 billion by 2032**. Google, Mastercard, Visa, Stripe, and Tempo have all launched dedicated agent payment infrastructure. Sui and Solana already have MPP integrations with live gateways and SDKs.
 
-If Canton captures just **10% of the $93B agentic payment market**, that represents **$9.3B in transaction volume** flowing through the network — generating CC traffic fees, Featured App rewards, and ecosystem activity.
+Agentic payment infrastructure is growing rapidly across multiple ecosystems. By funding open-source MPP tooling for Canton, the Development Fund helps ensure Canton developers have the same building blocks already available on Sui, Solana, and other chains preventing Canton from falling behind in this emerging category.
+The scale of this opportunity is significant: if Canton captures just 10% of the $93B agentic payment market, that represents $9.3B in transaction volume flowing through the network generating CC traffic fees and ecosystem activity.
 
 ## Rationale
 
@@ -182,8 +192,7 @@ If Canton captures just **10% of the $93B agentic payment market**, that represe
 
 **Why MPP over x402?** MPP is rail-agnostic — it works with any blockchain, fiat rail, or payment network. Canton's non-EVM architecture (DAML, gRPC Ledger API) makes EVM-native protocols like x402 less suitable, as they are primarily designed for EVM-based environments, whereas Canton’s architecture differs significantly. MPP's extensible method system (`Method.from()`) was designed exactly for chains like Canton that have unique settlement mechanics. Additionally, MPP's session intent enables streaming micropayments — critical for pay-per-token LLM billing — which x402 does not natively support.
 
-**Why a full platform, not just a payment method?** A payment method alone is a library. A platform is an ecosystem. Agents don't just need to pay — they need to manage funds, enforce spending limits, discover services, and interact through natural language. CAYPO delivers the complete stack: encrypted wallets with AES-256-GCM, per-transaction and daily safeguards, 35 MCP tools for AI assistant integration, a live gateway with 17 services, and CLI tooling for DevOps. This helps position Canton not only as a network that supports payments, but as one where agents can actively operate.
-**Why Cayvox Labs?** We are a Canton mainnet validator operator, Canton Catalyst 2026 #1 place. We have deep experience with DAML, Canton's Ledger API, CIP standards, and validator operations. M1+M2 are already delivered — proven execution, not promises.
+**Why a full toolkit, not just a payment method?** A payment method alone is a library. A toolkit is an ecosystem enabler. Agents don't just need to pay — they need to manage funds, enforce spending limits, discover services, and interact through natural language. CAYPO delivers the open-source building blocks: encrypted wallets with AES-256-GCM, per-transaction and daily safeguards, 35 MCP tools for AI assistant integration, a deployable gateway framework, and CLI tooling for DevOps. Any Canton developer can compose these packages into their own agent payment applications.
 
 **Why open-source building blocks?**  A proprietary payment SDK creates a single point of dependency. Open-source infrastructure creates an ecosystem. By publishing every package under Apache 2.0 / MIT, CAYPO enables Canton developers to fork the gateway and serve only their own API endpoints, import @caypo/mpp-canton into their own DeFi protocol for agent-native USDCx settlement, extend the 35 MCP tools with domain-specific agent skills, and build competing or complementary products on top of the same Canton payment primitives.
 
